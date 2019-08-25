@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+    database:
+        container_name: ${APP_NAME}_db
+        image: mysql:5.7
+        command: --max_allowed_packet=25M
+        ports:
+            - 3306:3306
+        restart: always
+        volumes:
+            - ./mysqldata:/var/lib/mysql/
+        environment:
+            MYSQL_ROOT_PASSWORD: 'default'
+            MYSQL_DATABASE: 'takeaway'
+            MYSQL_USER: 'root'
+            MYSQL_PASSWORD: 'secret'
+        extra_hosts:
+            - "database:127.0.0.1"
+    web-app:
+        container_name: ${APP_NAME}_web
+        build:
+            context: ./docker/web
+        ports:
+            - 9000:80
+        volumes:
+            - ./:/var/www/app
