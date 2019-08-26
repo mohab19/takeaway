@@ -11,8 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/user', 'UsersController@index');
+Route::get('/resturant','ResturantController@index')->name('resturant');

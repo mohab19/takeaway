@@ -1,0 +1,13 @@
+.nav .nav-item {
+    width: 100px;
+    text-align: center;
+}
+.nav .nav-item .active {
+    color: #fff !important;
+}
+.fa-eye {
+    padding: 0;
+}
+.btn-primary {
+    padding: 5px;
+}
