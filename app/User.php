@@ -36,4 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get all orders that belongs to the User.
+     */
+    public function order()
+    {
+        return $this->belongsToMany('App\Order')->using('App\OrderItems');
+    }
 }

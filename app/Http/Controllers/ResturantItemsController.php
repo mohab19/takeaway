@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\ResturantItems;
 use Illuminate\Http\Request;
+use App\ResturantItems;
 
 class ResturantItemsController extends Controller
 {
@@ -12,9 +12,10 @@ class ResturantItemsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $Items = ResturantItems::where('resturant_id', $id)->get();
+        return $Items;
     }
 
     /**

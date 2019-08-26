@@ -14,3 +14,5 @@
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/user', 'UsersController@index');
 Route::get('/resturant','ResturantController@index')->name('resturant');
+Route::get('/order','OrderController@index')->name('order');
+Route::get('/items/{id}','ResturantItemsController@index')->name('Item');

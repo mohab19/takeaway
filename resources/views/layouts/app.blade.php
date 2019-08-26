@@ -48,7 +48,10 @@
                                 <a class="nav-link" id="pills-resturant-tab" href="{{url('/resturant')}}" aria-selected="false">Resturants</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pills-user-tab" href="{{url('/user')}}" aria-selected="false">Contact</a>
+                                <a class="nav-link" id="pills-user-tab" href="{{url('/user')}}" aria-selected="false">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-order-tab" href="{{url('/order')}}" aria-selected="false">Make Order</a>
                             </li>
                         </ul>
                     </ul>
@@ -60,5 +63,6 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('js/takeaway.js') }}" defer></script>
 </body>
 </html>

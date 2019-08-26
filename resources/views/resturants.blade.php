@@ -9,8 +9,8 @@
                 <div class="card-body">
                     <div class="" id="pills-resturant">
                         @if(isset($resturant))
-                        <table class="table table-stripes text-center">
-                            <thead>
+                        <table class="table table-striped text-center">
+                            <thead class="thead-dark">
                                 <th>#No.</th>
                                 <th>Name</th>
                                 <th>Expected Delivery time</th>
