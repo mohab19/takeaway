@@ -2,7 +2,7 @@
     width: 100px;
     text-align: center;
 }
-.nav .nav-item .active {
+.nav .nav-link.active {
     color: #fff !important;
 }
 .fa-eye {
@@ -16,5 +16,8 @@
 }
 #menu {
     margin-top: 30px;
+    display: none;
+}
+.alert{
     display: none;
 }

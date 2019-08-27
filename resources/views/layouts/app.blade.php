@@ -41,18 +41,10 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="pills-home-tab" href="#pills-home" aria-selected="true">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="pills-resturant-tab" href="{{url('/resturant')}}" aria-selected="false">Resturants</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="pills-user-tab" href="{{url('/user')}}" aria-selected="false">Users</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="pills-order-tab" href="{{url('/order')}}" aria-selected="false">Make Order</a>
-                            </li>
+                            <a class="nav-link" id="pills-home-tab" href="{{url('/')}}" aria-selected="true">Home</a>
+                            <a class="nav-link" id="pills-resturant-tab" href="{{url('/resturant')}}" aria-selected="false">Resturants</a>
+                            <a class="nav-link" id="pills-user-tab" href="{{url('/user')}}" aria-selected="false">Users</a>
+                            <a class="nav-link" id="pills-order-tab" href="{{url('/order')}}" aria-selected="false">Make Order</a>
                         </ul>
                     </ul>
                 </div>

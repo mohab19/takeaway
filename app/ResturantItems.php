@@ -11,6 +11,6 @@ class ResturantItems extends Model
      */
     public function resturant()
     {
-        return $this->belongsToMany('App\Resturant')->using('App\OrderItems');
+        return $this->belongsTo('App\Resturant');
     }
 }

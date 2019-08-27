@@ -10,14 +10,40 @@ $(function() {
 
         if(user == 0 || !user) {
             alert('Please Choose a User to Make an Order!');
-        }
-        if(resturant == 0 || !resturant) {
+        } else if(resturant == 0 || !resturant) {
             alert('Please Choose a Resturant in order to choose from the Menu!');
-        }
-        if(items.length == 0 || items == undefined) {
+        } else if(items.length == 0 || items == undefined) {
             alert('You can not make an Order without choosing Items!');
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/order',
+                data: {
+                    _token:  $("meta[name='csrf-token']").attr("content"),
+                    user_id: user,
+                    resturant_id: resturant,
+                    item_ids: items
+                },
+                success: function(response) {
+                    $('.alert').removeClass('alert-danger').addClass('alert-success');
+                    $('.alert').html('<li>Order Placed Successfuly</li>');
+                    $('.alert').show(300).delay(2000).hide(300);
+                    $(window).scrollTop(0);
+                },
+                error: function(response) {                    
+                    $('.alert').removeClass('alert-success').addClass('alert-danger');
+                    $('.alert').html('<li>'+response.responseJSON.message+'</li>');
+                    $('.alert').show(300).delay(2000).hide(300);
+                    $(window).scrollTop(0);
+                }
+            });
         }
     
+    });
+
+    $('.nav-link').on('click', function() {
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
     });
 });
 

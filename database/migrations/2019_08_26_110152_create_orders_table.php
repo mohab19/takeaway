@@ -18,6 +18,9 @@ class CreateOrdersTable extends Migration
             $table->integer('user_id');
             $table->integer('resturant_id');
             $table->integer('total');
+            $table->string('order_status');
+            $table->string('message_status');
+            $table->datetime('delivered_at')->nullable();
             $table->timestamps();
         });
     }
