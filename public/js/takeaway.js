@@ -8,9 +8,7 @@ $(function() {
             items.push($(this).val());
         });
 
-        if(user == 0 || !user) {
-            alert('Please Choose a User to Make an Order!');
-        } else if(resturant == 0 || !resturant) {
+        if(resturant == 0 || !resturant) {
             alert('Please Choose a Resturant in order to choose from the Menu!');
         } else if(items.length == 0 || items == undefined) {
             alert('You can not make an Order without choosing Items!');
@@ -33,7 +31,7 @@ $(function() {
                 error: function(response) {                    
                     $('.alert').removeClass('alert-success').addClass('alert-danger');
                     $('.alert').html('<li>'+response.responseJSON.message+'</li>');
-                    $('.alert').show(300).delay(2000).hide(300);
+                    $('.alert').show(300).delay(3000).hide(300);
                     $(window).scrollTop(0);
                 }
             });

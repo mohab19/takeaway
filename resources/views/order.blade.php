@@ -7,6 +7,10 @@
             <ul class="alert alert-success">
                 <li>Order Placed Successfully</li>
             </ul>
+            @error('title')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+
             <div class="card">
                 <div class="card-header">Make Order</div>
                 <div class="card-body">

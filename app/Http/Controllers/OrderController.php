@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderRequest;
 use Illuminate\Http\Request;
 use App\ResturantItems;
 use App\OrderItem;
@@ -12,33 +13,61 @@ use App\User;
 class OrderController extends Controller
 {
 
-    public function sendMessageToUser($id)
+    public function sendMessageToUser($id, $indicator)
     {
         $user  = User::where('id', $id)->first();
-        $order = Order::where('user_id', $id)->where('order_status', 'sent')->with('orderItem')->latest()->first();
-        foreach($order->orderItem as $item) {
-            $item_ids[] = $item->resturantitems_id;
+        $order = Order::where('user_id', $id)->latest()->first();
+        $resturant = Resturant::where('id', $order->resturant_id)->first();
+
+        if(empty($resturant)) {
+            $resturantName = 'takeaway.com';
+            $deliveryMinutes = 90;
+        } else {
+            $resturantName = $resturant->name;
+            $deliveryMinutes = $resturant->delivery_minutes;
         }
-        $item = ResturantItems::whereIn('id', $item_ids)->first();
+        
+        if($indicator == 'create')
+            $message = 'Your order from ' .$resturantName. ' will arraive in ' .$deliveryMinutes. ' min, Thank you for using takeaway.com.';
+        else
+            $message = 'Have you recieved your order from ' .$resturantName. ', are you satisfied with our services? please rate us on the app.';
+
         if($user) {
             $MessageBird         = new \MessageBird\Client('DIP64vL2DlZ0bO1D9Vnpdl5dX');
             $Message             = new \MessageBird\Objects\Message();
             
             $Message->originator = 'MessageBird';
             $Message->recipients = array(intval('0020' . $user->phone));
-            $Message->body       = 'Your order from ' .$item->resturant->name. ' will arraive in ' .$item->resturant->delivery_minutes. ' min, Thank you for using takeaway.com.';
+            $Message->body       = $message;
             
             $response = $MessageBird->messages->create($Message);
-            $update = Order::where('user_id', $id)->where('order_status', 'sent')->update([
-                'message_status' => $response->recipients->items[0]->status,
-                'delivered_at'   => date('Y-m-d H:i:s', strtotime('+' . $item->resturant->delivery_minutes))
-                ]);
+            
             if($response) 
-                return response(200);
+                return true;
             else
-                return response(300);
+                return false;
         }
     }
+
+    public function messageCronjob()
+    {
+        $deliveredOrders = Order::where('delivered_at', '<=',date('Y-m-d H:i:s', strtotime('-90 minutes')))->get();
+        $indicator = 0;
+        foreach($deliveredOrders as $key => $order) {
+            $update = Order::where('user_id', $order->user_id)->where('order_status', 'delivered')->update([
+                'message_status' => 'delivered',
+            ]);
+            $response = $this->sendMessageToUser($order->user_id, 'update');
+            if($response)
+                $indicator += 1;
+        }
+
+        if($indicator == count($deliveredOrders))
+            return response(200);
+        else
+            return response(300);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -67,7 +96,7 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
         $Items = ResturantItems::whereIn('id', $request->item_ids)->get();
         $total = 0;
@@ -83,7 +112,7 @@ class OrderController extends Controller
             'resturant_id'   => $request->resturant_id,
             'total'          => $total,
             'order_status'   => 'sent',
-            'message_status' => 'stand by',
+            'message_status' => 'pending',
             'delivered_at'   => null,
         ]);
 
@@ -94,9 +123,16 @@ class OrderController extends Controller
             ]);
         }
 
-        $response = $this->sendMessageToUser($request->user_id);
+        $response = $this->sendMessageToUser($request->user_id, 'create');
 
-        return $response;
+        if($response) {
+            $update = Order::where('user_id', $request->user_id)->where('order_status', 'sent')->update([
+                'message_status' => 'sent',
+            ]);
+            return response(200);
+        } else {
+            return response(200);
+        }
     }
 
     /**
@@ -128,9 +164,20 @@ class OrderController extends Controller
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, $id)
     {
-        //
+        $order = Order::where('id', $id)->update([
+            'order_status'   => 'delivered',
+            'message_status' => 'pending',
+            'delivered_at'   => date('Y-m-d H:i:s'),
+
+        ]);
+
+        if($order)
+            return redirect()->back()->with('status', 'Order updated!');
+        else 
+            return redirect()->back()->with('error', 'something went wrong!');
+            
     }
 
     /**

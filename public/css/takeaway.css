@@ -8,8 +8,11 @@
 .fa-eye {
     padding: 0;
 }
-.btn-primary {
+.btn {
     padding: 5px;
+}
+.update {
+    display: inline;
 }
 .form-check {
     padding-left: 75px;
