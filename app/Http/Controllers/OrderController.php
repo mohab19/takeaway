@@ -26,23 +26,23 @@ class OrderController extends Controller
             $resturantName = $resturant->name;
             $deliveryMinutes = $resturant->delivery_minutes;
         }
-        
+
         if($indicator == 'create')
             $message = 'Your order from ' .$resturantName. ' will arraive in ' .$deliveryMinutes. ' min, Thank you for using takeaway.com.';
         else
             $message = 'Have you recieved your order from ' .$resturantName. ', are you satisfied with our services? please rate us on the app.';
 
         if($user) {
-            $MessageBird         = new \MessageBird\Client('DIP64vL2DlZ0bO1D9Vnpdl5dX');
+            $MessageBird         = new \MessageBird\Client('KxzjNNbHT28lW9OIa8TRI0PQe');
             $Message             = new \MessageBird\Objects\Message();
-            
+
             $Message->originator = 'MessageBird';
             $Message->recipients = array(intval('0020' . $user->phone));
             $Message->body       = $message;
-            
+
             $response = $MessageBird->messages->create($Message);
-            
-            if($response) 
+
+            if($response)
                 return true;
             else
                 return false;
@@ -119,7 +119,7 @@ class OrderController extends Controller
         foreach($Items as $key => $item) {
             $saveItems = OrderItem::create([
                 'order_id'          => $saveOrder->id,
-                'resturantitems_id' => $item->id, 
+                'resturantitems_id' => $item->id,
             ]);
         }
 
@@ -175,9 +175,9 @@ class OrderController extends Controller
 
         if($order)
             return redirect()->back()->with('status', 'Order updated!');
-        else 
+        else
             return redirect()->back()->with('error', 'something went wrong!');
-            
+
     }
 
     /**
